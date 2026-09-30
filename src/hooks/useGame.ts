@@ -29,6 +29,36 @@ import {
 
 const localAgent = new AIAgent();
 
+const disableTransitionsTemporarily = () => {
+  const css = document.createElement('style');
+  css.appendChild(
+    document.createTextNode(
+      `*, *::before, *::after {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -o-transition: none !important;
+        -ms-transition: none !important;
+        transition: none !important;
+      }`
+    )
+  );
+  document.head.appendChild(css);
+
+  return () => {
+    // Force a reflow to ensure instant theme application without transition
+    (() => window.getComputedStyle(document.body).opacity)();
+
+    // Re-enable transitions on the next frame
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (document.head.contains(css)) {
+          document.head.removeChild(css);
+        }
+      });
+    });
+  };
+};
+
 export function useGame() {
   const [settings, setSettings] = useState<GameSettings>(() => loadGameSettings());
   const [stats, setStats] = useState<GameStats>(() => loadGameStats());
@@ -57,32 +87,28 @@ export function useGame() {
   }, [settings.soundEnabled]);
 
   useEffect(() => {
+    const restoreTransitions = disableTransitionsTemporarily();
     const root = document.documentElement;
     const body = document.body;
-    if (settings.theme === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      body.classList.add('dark');
-      body.classList.remove('light');
-    } else if (settings.theme === 'light') {
+
+    const isLight =
+      settings.theme === 'light' ||
+      (settings.theme === 'system' &&
+        !window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    if (isLight) {
       root.classList.add('light');
       root.classList.remove('dark');
       body.classList.add('light');
       body.classList.remove('dark');
     } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) {
-        root.classList.add('dark');
-        root.classList.remove('light');
-        body.classList.add('dark');
-        body.classList.remove('light');
-      } else {
-        root.classList.add('light');
-        root.classList.remove('dark');
-        body.classList.add('light');
-        body.classList.remove('dark');
-      }
+      root.classList.add('dark');
+      root.classList.remove('light');
+      body.classList.add('dark');
+      body.classList.remove('light');
     }
+
+    restoreTransitions();
   }, [settings.theme]);
 
   useEffect(() => {
@@ -278,19 +304,27 @@ export function useGame() {
   );
 
   const startNewGame = useCallback(
-    (startingPlayer?: Player) => {
+    (customHumanSymbol?: Player) => {
       requestIdRef.current++;
       setIsAiThinking(false);
       setAiSearchStats(null);
       localAgent.reset();
 
-      const firstPlayer = startingPlayer ?? 'X';
+      const activeHumanSymbol = customHumanSymbol ?? settingsRef.current.humanSymbol;
+      if (customHumanSymbol && customHumanSymbol !== settingsRef.current.humanSymbol) {
+        settingsRef.current = { ...settingsRef.current, humanSymbol: customHumanSymbol };
+        setSettings((prev) => ({ ...prev, humanSymbol: customHumanSymbol }));
+      }
+
+      // In Tic-Tac-Toe, player 'X' always makes the first move
+      const firstPlayer: Player = 'X';
       const newState = createInitialGameState(firstPlayer);
       setGameState(newState);
       clearSavedGameState();
 
-      const aiSymbol = settingsRef.current.humanSymbol === 'X' ? 'O' : 'X';
-      if (firstPlayer === aiSymbol) {
+      const aiSymbol: Player = activeHumanSymbol === 'X' ? 'O' : 'X';
+      // If AI is 'X', AI must play first!
+      if (aiSymbol === 'X') {
         triggerAiTurn(newState);
       }
     },

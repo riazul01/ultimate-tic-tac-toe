@@ -83,8 +83,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-[580px] mx-auto p-2 sm:p-3.5 bg-slate-900/95 rounded-2xl border border-slate-800 shadow-2xl backdrop-blur-md">
-      <div className="grid grid-cols-3 gap-2 sm:gap-2.5 w-full relative">
+    <div className="relative w-full mx-auto p-1.5 sm:p-2 bg-slate-950/70 rounded-xl border border-slate-800/80">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 w-full relative">
         {boards.map((cells, boardIdx) => {
           const isActive =
             gameState.gameStatus === 'playing' &&

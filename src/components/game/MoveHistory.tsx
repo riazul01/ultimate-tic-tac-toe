@@ -55,11 +55,20 @@ export const MoveHistory: React.FC<MoveHistoryProps> = ({ history }) => {
                     {idx + 1}.
                   </span>
                   <span
-                    className={`font-bold ${
-                      isX ? 'text-sky-400' : 'text-rose-400'
+                    className={`w-5 h-5 rounded flex items-center justify-center ${
+                      isX ? 'text-sky-400 bg-sky-950/60' : 'text-rose-400 bg-rose-950/60'
                     }`}
                   >
-                    {item.move.player}
+                    {isX ? (
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    ) : (
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="8" />
+                      </svg>
+                    )}
                   </span>
                   <span className="text-slate-400">→</span>
                   <span>

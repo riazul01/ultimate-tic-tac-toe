@@ -70,7 +70,7 @@ export const MicroBoard: React.FC<MicroBoardProps> = ({
       id={`board-${boardIndex}`}
       aria-label={`Micro-board ${boardIndex + 1} (${BOARD_NAMES[boardIndex]}): ${status}`}
       className={`
-        relative p-1.5 sm:p-2 rounded-xl transition-all duration-300 flex flex-col justify-between overflow-hidden
+        relative p-1.5 sm:p-2 rounded-xl transition-all duration-300 flex flex-col justify-center overflow-hidden
         ${
           isActive && !isCompleted
             ? 'bg-indigo-950/50 border-2 border-indigo-400 shadow-md shadow-indigo-500/20 ring-1 ring-indigo-500/40'
@@ -80,18 +80,6 @@ export const MicroBoard: React.FC<MicroBoardProps> = ({
         }
       `}
     >
-      {/* Micro-Board Title Label */}
-      <div className="flex items-center justify-between mb-1 px-0.5 min-h-[18px]">
-        <span className="text-[10px] sm:text-[11px] font-medium text-slate-400 truncate">
-          {BOARD_NAMES[boardIndex]}
-        </span>
-        {isActive && !isCompleted && (
-          <span className="text-[9px] font-bold text-indigo-400 px-1.5 py-0.2 rounded-full bg-indigo-950 border border-indigo-700/60 uppercase tracking-wider shrink-0">
-            Active
-          </span>
-        )}
-      </div>
-
       {/* 3x3 Grid of Cells */}
       <div className="grid grid-cols-3 gap-1 sm:gap-1.5 relative w-full">
         {cells.map((val, cellIdx) => {

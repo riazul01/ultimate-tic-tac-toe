@@ -71,7 +71,7 @@ export const GameResultModal: React.FC<GameResultModalProps> = ({
         </div>
 
         {/* Sector Control Breakdown */}
-        <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/60 flex items-center justify-around text-xs">
+        <div className="bg-slate-800 rounded-xl p-3 border border-slate-700 flex items-center justify-around text-xs">
           <div className="text-center">
             <span className="text-sky-400 font-bold text-base block">{xSectors}</span>
             <span className="text-slate-400">X Sectors Won</span>
@@ -95,14 +95,14 @@ export const GameResultModal: React.FC<GameResultModalProps> = ({
           <button
             type="button"
             onClick={onPlayAgain}
-            className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-colors cursor-pointer"
+            className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl transition-colors cursor-pointer"
           >
             Play Again
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl border border-slate-700 transition-colors cursor-pointer"
+            className="px-4 py-2.5 bg-slate-800 text-slate-300 font-medium rounded-xl border border-slate-700 transition-colors cursor-pointer"
           >
             Review Board
           </button>
