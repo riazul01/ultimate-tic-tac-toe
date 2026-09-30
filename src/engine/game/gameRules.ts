@@ -1,12 +1,12 @@
-import type { GameState, Move, Player, MicroBoardStatus } from './types';
-import { evaluateMicroBoard, evaluateMacroBoard } from './winDetection';
+import type { GameState, Move, Player, MicroBoardStatus } from "./types";
+import { evaluateMicroBoard, evaluateMacroBoard } from "./winDetection";
 
 /**
  * Determine if a micro-board is still open for moves.
  * A board is open if its status is 'playing' and has at least one empty cell.
  */
 export function isBoardPlayable(status: MicroBoardStatus): boolean {
-  return status === 'playing';
+  return status === "playing";
 }
 
 /**
@@ -15,7 +15,7 @@ export function isBoardPlayable(status: MicroBoardStatus): boolean {
  */
 export function getNextActiveBoard(
   targetBoardIndex: number,
-  boardStatuses: MicroBoardStatus[]
+  boardStatuses: MicroBoardStatus[],
 ): number | null {
   if (isBoardPlayable(boardStatuses[targetBoardIndex])) {
     return targetBoardIndex;
@@ -30,10 +30,10 @@ export function isValidMove(
   state: GameState,
   boardIndex: number,
   cellIndex: number,
-  player?: Player
+  player?: Player,
 ): boolean {
   // 1. Game must be in playing state
-  if (state.gameStatus !== 'playing' || state.winner !== null) {
+  if (state.gameStatus !== "playing" || state.winner !== null) {
     return false;
   }
 
@@ -69,7 +69,7 @@ export function isValidMove(
  * Generates all legal moves for the current player in the given GameState.
  */
 export function getLegalMoves(state: GameState): Move[] {
-  if (state.gameStatus !== 'playing' || state.winner !== null) {
+  if (state.gameStatus !== "playing" || state.winner !== null) {
     return [];
   }
 
@@ -108,9 +108,9 @@ export function getLegalMoves(state: GameState): Move[] {
 /**
  * Creates a fresh, initial GameState
  */
-export function createInitialGameState(firstPlayer: Player = 'X'): GameState {
+export function createInitialGameState(firstPlayer: Player = "X"): GameState {
   const boards = Array.from({ length: 9 }, () => Array(9).fill(null));
-  const boardStatuses = Array<MicroBoardStatus>(9).fill('playing');
+  const boardStatuses = Array<MicroBoardStatus>(9).fill("playing");
   const microWinningLines = Array(9).fill(null);
 
   return {
@@ -121,7 +121,7 @@ export function createInitialGameState(firstPlayer: Player = 'X'): GameState {
     activeBoard: null,
     winner: null,
     macroWinningLine: null,
-    gameStatus: 'playing',
+    gameStatus: "playing",
     history: [],
     redoStack: [],
   };
@@ -134,11 +134,11 @@ export function createInitialGameState(firstPlayer: Player = 'X'): GameState {
 export function applyMove(
   state: GameState,
   boardIndex: number,
-  cellIndex: number
+  cellIndex: number,
 ): GameState {
   if (!isValidMove(state, boardIndex, cellIndex)) {
     throw new Error(
-      `Illegal move: board=${boardIndex}, cell=${cellIndex}, player=${state.currentPlayer}`
+      `Illegal move: board=${boardIndex}, cell=${cellIndex}, player=${state.currentPlayer}`,
     );
   }
 
@@ -146,7 +146,7 @@ export function applyMove(
 
   // Clone boards
   const newBoards = state.boards.map((b, idx) =>
-    idx === boardIndex ? [...b] : b
+    idx === boardIndex ? [...b] : b,
   );
   newBoards[boardIndex][cellIndex] = player;
 
@@ -173,7 +173,7 @@ export function applyMove(
     ? null
     : getNextActiveBoard(cellIndex, newBoardStatuses);
 
-  const nextPlayer: Player = player === 'X' ? 'O' : 'X';
+  const nextPlayer: Player = player === "X" ? "O" : "X";
 
   const historyItem = {
     move: { boardIndex, cellIndex, player },
@@ -193,7 +193,7 @@ export function applyMove(
     activeBoard: nextActiveBoard,
     winner: macroResult.winner,
     macroWinningLine: macroResult.line,
-    gameStatus: isGameOver ? 'finished' : 'playing',
+    gameStatus: isGameOver ? "finished" : "playing",
     history: [...state.history, historyItem],
     redoStack: [],
   };
@@ -215,7 +215,7 @@ export function undoMove(state: GameState, steps: number = 1): GameState {
     const { move } = lastHistory;
 
     const newBoards = currentState.boards.map((b, idx) =>
-      idx === move.boardIndex ? [...b] : b
+      idx === move.boardIndex ? [...b] : b,
     );
     newBoards[move.boardIndex][move.cellIndex] = null;
 
@@ -236,7 +236,7 @@ export function undoMove(state: GameState, steps: number = 1): GameState {
       activeBoard: lastHistory.previousActiveBoard,
       winner: lastHistory.previousWinner,
       macroWinningLine: lastHistory.previousMacroWinningLine,
-      gameStatus: 'playing',
+      gameStatus: "playing",
       history: newHistory,
       redoStack: [lastHistory, ...currentState.redoStack],
     };
@@ -263,7 +263,7 @@ export function redoMove(state: GameState, steps: number = 1): GameState {
     const afterMove = applyMove(
       currentState,
       itemToRedo.move.boardIndex,
-      itemToRedo.move.cellIndex
+      itemToRedo.move.cellIndex,
     );
 
     currentState = {

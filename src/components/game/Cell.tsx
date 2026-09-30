@@ -1,5 +1,5 @@
-import React from 'react';
-import type { CellValue, Player } from '../../engine/game/types';
+import React from "react";
+import type { CellValue, Player } from "engine/game/types";
 
 interface CellProps {
   boardIndex: number;
@@ -29,8 +29,8 @@ export const Cell: React.FC<CellProps> = ({
   const accessibleLabel = value
     ? `Board ${boardIndex + 1}, cell ${cellIndex + 1}, occupied by ${value}`
     : isClickable
-    ? `Board ${boardIndex + 1}, cell ${cellIndex + 1}, available to play`
-    : `Board ${boardIndex + 1}, cell ${cellIndex + 1}, unavailable`;
+      ? `Board ${boardIndex + 1}, cell ${cellIndex + 1}, available to play`
+      : `Board ${boardIndex + 1}, cell ${cellIndex + 1}, unavailable`;
 
   return (
     <button
@@ -44,23 +44,23 @@ export const Cell: React.FC<CellProps> = ({
         transition-all duration-150 group select-none
         ${
           value
-            ? 'bg-slate-800/80 cursor-default'
+            ? "bg-slate-800/80 cursor-default"
             : isClickable
-            ? 'bg-slate-800/50 hover:bg-slate-700/70 hover:scale-[1.03] cursor-pointer shadow-sm hover:shadow-indigo-500/20 active:scale-95'
-            : 'bg-slate-800/20 cursor-not-allowed opacity-80'
+              ? "bg-slate-800/50 hover:bg-slate-700/70 hover:scale-[1.03] cursor-pointer shadow-sm hover:shadow-indigo-500/20 active:scale-95"
+              : "bg-slate-800/20 cursor-not-allowed opacity-80"
         }
         ${
           isLastMove
-            ? 'ring-2 ring-amber-400 shadow-md shadow-amber-500/20 z-10'
+            ? "ring-2 ring-amber-400 shadow-md shadow-amber-500/20 z-10"
             : isClickable
-            ? 'border border-slate-700/60 hover:border-indigo-400/80'
-            : 'border border-slate-800/40'
+              ? "border border-slate-700/60 hover:border-indigo-400/80"
+              : "border border-slate-800/40"
         }
         focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:z-20
       `}
     >
       {/* Played Symbol */}
-      {value === 'X' && (
+      {value === "X" && (
         <svg
           className="w-3/5 h-3/5 text-sky-400 animate-victory-pop drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]"
           viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ export const Cell: React.FC<CellProps> = ({
         </svg>
       )}
 
-      {value === 'O' && (
+      {value === "O" && (
         <svg
           className="w-3/5 h-3/5 text-rose-400 animate-victory-pop drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]"
           viewBox="0 0 24 24"
@@ -92,7 +92,7 @@ export const Cell: React.FC<CellProps> = ({
       {/* Dead-centered Ghost Preview on Hover */}
       {!value && isClickable && (
         <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-40 transition-opacity duration-150 pointer-events-none">
-          {currentPlayer === 'X' ? (
+          {currentPlayer === "X" ? (
             <svg
               className="w-3/5 h-3/5 text-sky-400"
               viewBox="0 0 24 24"

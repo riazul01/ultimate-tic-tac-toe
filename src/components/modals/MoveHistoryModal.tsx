@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
-import type { GameHistoryItem, Player } from '../../engine/game/types';
-import { Modal } from '../ui/Modal';
+import React, { useEffect, useRef } from "react";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
+import type { GameHistoryItem, Player } from "engine/game/types";
+import { Modal } from "components/ui/Modal";
 
 interface MoveHistoryModalProps {
   isOpen: boolean;
@@ -11,20 +11,26 @@ interface MoveHistoryModalProps {
 }
 
 const BOARD_NAMES = [
-  'Top-Left', 'Top-Center', 'Top-Right',
-  'Mid-Left', 'Center', 'Mid-Right',
-  'Bot-Left', 'Bot-Center', 'Bot-Right',
+  "Top-Left",
+  "Top-Center",
+  "Top-Right",
+  "Mid-Left",
+  "Center",
+  "Mid-Right",
+  "Bot-Left",
+  "Bot-Center",
+  "Bot-Right",
 ];
 
 /** Player Badge Icon matching game board styling */
 const PlayerBadge: React.FC<{ player: Player }> = ({ player }) => {
-  const isX = player === 'X';
+  const isX = player === "X";
   return (
     <span
       className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${
         isX
-          ? 'bg-sky-100 dark:bg-sky-950/70 text-sky-600 dark:text-sky-400 border border-sky-300 dark:border-sky-800/60'
-          : 'bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800/60'
+          ? "bg-sky-100 dark:bg-sky-950/70 text-sky-600 dark:text-sky-400 border border-sky-300 dark:border-sky-800/60"
+          : "bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800/60"
       }`}
     >
       {isX ? (
@@ -66,21 +72,25 @@ export const MoveHistoryModal: React.FC<MoveHistoryModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      endOfListRef.current?.scrollIntoView({ behavior: 'smooth' });
+      endOfListRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [isOpen, history.length]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Move History" maxWidth="max-w-md">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Move History"
+      maxWidth="max-w-md"
+    >
       <div className="space-y-3">
         {/* Header Summary */}
         <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-0.5">
           <span>
-            {history.length} {history.length === 1 ? 'move recorded' : 'total moves'}
+            {history.length}{" "}
+            {history.length === 1 ? "move recorded" : "total moves"}
           </span>
-          {history.length > 0 && (
-            <span>Latest: Move {history.length}</span>
-          )}
+          {history.length > 0 && <span>Latest: Move {history.length}</span>}
         </div>
 
         {/* Moves List or Empty State with SimpleBar */}
@@ -106,20 +116,19 @@ export const MoveHistoryModal: React.FC<MoveHistoryModalProps> = ({
             </p>
           </div>
         ) : (
-          <SimpleBar
-            style={{ maxHeight: '280px' }}
-            autoHide={true}
-          >
+          <SimpleBar style={{ maxHeight: "280px" }} autoHide={true}>
             <div className="space-y-1.5 py-0.5">
               {history.map((item, idx) => {
                 const boardName =
-                  BOARD_NAMES[item.move.boardIndex] || `Board ${item.move.boardIndex + 1}`;
+                  BOARD_NAMES[item.move.boardIndex] ||
+                  `Board ${item.move.boardIndex + 1}`;
                 const cellName =
-                  BOARD_NAMES[item.move.cellIndex] || `Cell ${item.move.cellIndex + 1}`;
+                  BOARD_NAMES[item.move.cellIndex] ||
+                  `Cell ${item.move.cellIndex + 1}`;
                 const time = new Date(item.timestamp).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
                 });
 
                 return (
@@ -136,8 +145,12 @@ export const MoveHistoryModal: React.FC<MoveHistoryModalProps> = ({
                         <span className="font-medium text-slate-800 dark:text-slate-200">
                           {boardName}
                         </span>
-                        <span className="text-slate-400 dark:text-slate-500 mx-1">→</span>
-                        <span className="text-slate-600 dark:text-slate-300">{cellName}</span>
+                        <span className="text-slate-400 dark:text-slate-500 mx-1">
+                          →
+                        </span>
+                        <span className="text-slate-600 dark:text-slate-300">
+                          {cellName}
+                        </span>
                       </div>
                     </div>
                     <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">

@@ -1,4 +1,4 @@
-import type { GameState, Move } from '../game/types';
+import type { GameState, Move } from "engine/game/types";
 
 export const HashFlag = {
   EXACT: 0,
@@ -6,7 +6,7 @@ export const HashFlag = {
   UPPERBOUND: 2,
 } as const;
 
-export type HashFlagType = typeof HashFlag[keyof typeof HashFlag];
+export type HashFlagType = (typeof HashFlag)[keyof typeof HashFlag];
 
 export interface TTEntry {
   key: string;
@@ -20,13 +20,13 @@ export interface TTEntry {
  * Generates a fast string key representation of the GameState.
  */
 export function getGameStateKey(state: GameState): string {
-  let key = `${state.currentPlayer}:${state.activeBoard ?? 'any'}:`;
+  let key = `${state.currentPlayer}:${state.activeBoard ?? "any"}:`;
   for (let b = 0; b < 9; b++) {
     for (let c = 0; c < 9; c++) {
       const val = state.boards[b][c];
-      key += val === null ? '.' : val;
+      key += val === null ? "." : val;
     }
-    key += ',';
+    key += ",";
   }
   return key;
 }
@@ -49,7 +49,7 @@ export class TranspositionTable {
     depth: number,
     score: number,
     flag: HashFlagType,
-    bestMove: Move | null
+    bestMove: Move | null,
   ): void {
     if (this.table.size >= this.maxSize) {
       this.table.clear();

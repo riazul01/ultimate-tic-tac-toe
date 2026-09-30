@@ -1,14 +1,14 @@
-export type Player = 'X' | 'O';
+export type Player = "X" | "O";
 
 export type CellValue = Player | null;
 
-export type MicroBoardStatus = 'playing' | 'X' | 'O' | 'draw';
+export type MicroBoardStatus = "playing" | "X" | "O" | "draw";
 
 export type WinningLine = [number, number, number];
 
 export interface Move {
   boardIndex: number; // 0 to 8 (macro board index)
-  cellIndex: number;  // 0 to 8 (micro board cell index)
+  cellIndex: number; // 0 to 8 (micro board cell index)
   player: Player;
 }
 
@@ -24,11 +24,11 @@ export interface GameState {
   // Active micro-board index (0-8) or null if player can play anywhere
   activeBoard: number | null;
   // Game winner: 'X', 'O', 'draw', or null if still playing
-  winner: Player | 'draw' | null;
+  winner: Player | "draw" | null;
   // Macro winning line if game is won
   macroWinningLine: WinningLine | null;
   // Status: 'playing' or 'finished'
-  gameStatus: 'playing' | 'finished';
+  gameStatus: "playing" | "finished";
   // Move history for undo/redo and log
   history: GameHistoryItem[];
   // Redo stack
@@ -40,12 +40,12 @@ export interface GameHistoryItem {
   previousActiveBoard: number | null;
   previousBoardStatus: MicroBoardStatus;
   previousMicroWinningLine: WinningLine | null;
-  previousWinner: Player | 'draw' | null;
+  previousWinner: Player | "draw" | null;
   previousMacroWinningLine: WinningLine | null;
   timestamp: number;
 }
 
-export type AIDifficulty = 'easy' | 'medium' | 'hard' | 'expert';
+export type AIDifficulty = "easy" | "medium" | "hard" | "expert";
 
 export interface AISearchStats {
   nodesEvaluated: number;
@@ -71,5 +71,5 @@ export interface GameSettings {
   soundEnabled: boolean;
   animationsEnabled: boolean;
   debugMode: boolean;
-  theme: 'dark' | 'light' | 'system';
+  theme: "dark" | "light" | "system";
 }

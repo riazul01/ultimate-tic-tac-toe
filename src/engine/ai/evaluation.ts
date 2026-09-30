@@ -1,19 +1,11 @@
-import type { GameState, Player, MicroBoardStatus } from '../game/types';
-import { WINNING_LINES } from '../game/winDetection';
+import type { GameState, Player, MicroBoardStatus } from "engine/game/types";
+import { WINNING_LINES } from "engine/game/winDetection";
 
 // Positional weight matrices (Center is strongest, corners second, edges third)
-export const POSITION_WEIGHTS = [
-  3, 2, 3,
-  2, 4, 2,
-  3, 2, 3,
-];
+export const POSITION_WEIGHTS = [3, 2, 3, 2, 4, 2, 3, 2, 3];
 
 // Macro positional weights (Center board is crucial in Ultimate Tic-Tac-Toe)
-export const MACRO_BOARD_WEIGHTS = [
-  6, 4, 6,
-  4, 10, 4,
-  6, 4, 6,
-];
+export const MACRO_BOARD_WEIGHTS = [6, 4, 6, 4, 10, 4, 6, 4, 6];
 
 const WIN_SCORE = 100000;
 const MACRO_TWO_IN_ROW = 600;
@@ -28,7 +20,7 @@ const SEND_FREE_CHOICE_PENALTY = 70;
  * Returns a positive score if the state favors `forPlayer`, negative if favors opponent.
  */
 export function evaluateBoard(state: GameState, forPlayer: Player): number {
-  const opponent: Player = forPlayer === 'X' ? 'O' : 'X';
+  const opponent: Player = forPlayer === "X" ? "O" : "X";
 
   // 1. Terminal states
   if (state.winner === forPlayer) {
@@ -37,7 +29,7 @@ export function evaluateBoard(state: GameState, forPlayer: Player): number {
   if (state.winner === opponent) {
     return -WIN_SCORE;
   }
-  if (state.winner === 'draw') {
+  if (state.winner === "draw") {
     return 0;
   }
 
@@ -55,8 +47,12 @@ export function evaluateBoard(state: GameState, forPlayer: Player): number {
       score += MICRO_WIN_BASE * bWeight;
     } else if (bStatus === opponent) {
       score -= MICRO_WIN_BASE * bWeight;
-    } else if (bStatus === 'playing') {
-      const microScore = evaluateMicroState(state.boards[b], forPlayer, opponent);
+    } else if (bStatus === "playing") {
+      const microScore = evaluateMicroState(
+        state.boards[b],
+        forPlayer,
+        opponent,
+      );
       score += microScore * (bWeight / 4);
     }
   }
@@ -71,7 +67,7 @@ export function evaluateBoard(state: GameState, forPlayer: Player): number {
   } else {
     const targetBoard = state.activeBoard;
     const targetStatus = state.boardStatuses[targetBoard];
-    if (targetStatus === 'playing') {
+    if (targetStatus === "playing") {
       const targetMicroCells = state.boards[targetBoard];
       const forPlayerThreats = countThreats(targetMicroCells, forPlayer);
       const oppThreats = countThreats(targetMicroCells, opponent);
@@ -95,7 +91,7 @@ export function evaluateBoard(state: GameState, forPlayer: Player): number {
 function evaluateMacroLines(
   boardStatuses: MicroBoardStatus[],
   forPlayer: Player,
-  opponent: Player
+  opponent: Player,
 ): number {
   let score = 0;
 
@@ -112,7 +108,7 @@ function evaluateMacroLines(
     for (const s of [sA, sB, sC]) {
       if (s === forPlayer) forCount++;
       else if (s === opponent) oppCount++;
-      else if (s === 'draw') blocked = true;
+      else if (s === "draw") blocked = true;
     }
 
     if (blocked) continue;
@@ -141,7 +137,7 @@ function evaluateMacroLines(
 function evaluateMicroState(
   cells: (Player | null)[],
   forPlayer: Player,
-  opponent: Player
+  opponent: Player,
 ): number {
   let score = 0;
 
@@ -208,7 +204,7 @@ export function countThreats(cells: (Player | null)[], player: Player): number {
 export function isMicroWinningMove(
   cells: (Player | null)[],
   cellIndex: number,
-  player: Player
+  player: Player,
 ): boolean {
   if (cells[cellIndex] !== null) return false;
   const simulated = [...cells];
@@ -216,7 +212,11 @@ export function isMicroWinningMove(
 
   for (let i = 0; i < WINNING_LINES.length; i++) {
     const [a, b, c] = WINNING_LINES[i];
-    if (simulated[a] === player && simulated[b] === player && simulated[c] === player) {
+    if (
+      simulated[a] === player &&
+      simulated[b] === player &&
+      simulated[c] === player
+    ) {
       return true;
     }
   }

@@ -1,7 +1,17 @@
-import type { GameState, Move, Player, AISearchStats } from '../game/types';
-import { applyMove, getLegalMoves } from '../game/gameRules';
-import { evaluateBoard, isMicroWinningMove, MACRO_BOARD_WEIGHTS, POSITION_WEIGHTS } from './evaluation';
-import { HashFlag, type HashFlagType, TranspositionTable, getGameStateKey } from './transpositionTable';
+import type { GameState, Move, Player, AISearchStats } from "engine/game/types";
+import { applyMove, getLegalMoves } from "engine/game/gameRules";
+import {
+  evaluateBoard,
+  isMicroWinningMove,
+  MACRO_BOARD_WEIGHTS,
+  POSITION_WEIGHTS,
+} from "./evaluation";
+import {
+  HashFlag,
+  type HashFlagType,
+  TranspositionTable,
+  getGameStateKey,
+} from "./transpositionTable";
 
 const INF = 9999999;
 
@@ -33,9 +43,9 @@ export class MinimaxSearcher {
     moves: Move[],
     state: GameState,
     player: Player,
-    ttBestMove: Move | null
+    ttBestMove: Move | null,
   ): Move[] {
-    const opponent: Player = player === 'X' ? 'O' : 'X';
+    const opponent: Player = player === "X" ? "O" : "X";
 
     const scoredMoves = moves.map((move) => {
       let score = 0;
@@ -67,7 +77,7 @@ export class MinimaxSearcher {
 
       // 5. Penalize sending opponent to free choice
       const destStatus = state.boardStatuses[move.cellIndex];
-      if (destStatus !== 'playing') {
+      if (destStatus !== "playing") {
         score -= 200;
       }
 
@@ -87,12 +97,15 @@ export class MinimaxSearcher {
     alpha: number,
     beta: number,
     maximizingPlayer: Player,
-    useTT: boolean
+    useTT: boolean,
   ): { score: number; bestMove: Move | null } {
     this.nodesEvaluated++;
 
     if ((this.nodesEvaluated & 255) === 0) {
-      if (this.timeLimitMs > 0 && Date.now() - this.startTime > this.timeLimitMs) {
+      if (
+        this.timeLimitMs > 0 &&
+        Date.now() - this.startTime > this.timeLimitMs
+      ) {
         this.isAborted = true;
       }
     }
@@ -101,7 +114,7 @@ export class MinimaxSearcher {
       return { score: evaluateBoard(state, maximizingPlayer), bestMove: null };
     }
 
-    if (state.gameStatus === 'finished') {
+    if (state.gameStatus === "finished") {
       return { score: evaluateBoard(state, maximizingPlayer), bestMove: null };
     }
 
@@ -109,7 +122,7 @@ export class MinimaxSearcher {
       return { score: evaluateBoard(state, maximizingPlayer), bestMove: null };
     }
 
-    const stateKey = useTT ? getGameStateKey(state) : '';
+    const stateKey = useTT ? getGameStateKey(state) : "";
     let ttBestMove: Move | null = null;
 
     if (useTT) {
@@ -139,7 +152,7 @@ export class MinimaxSearcher {
       legalMoves,
       state,
       state.currentPlayer,
-      ttBestMove
+      ttBestMove,
     );
 
     let bestMove: Move | null = orderedMoves[0];
@@ -156,7 +169,7 @@ export class MinimaxSearcher {
         alpha,
         beta,
         maximizingPlayer,
-        useTT
+        useTT,
       );
 
       if (this.isAborted) {
@@ -200,7 +213,7 @@ export class MinimaxSearcher {
    */
   public searchBestMove(
     state: GameState,
-    options: SearchOptions
+    options: SearchOptions,
   ): { move: Move | null; stats: AISearchStats } {
     this.nodesEvaluated = 0;
     this.startTime = Date.now();
@@ -249,7 +262,7 @@ export class MinimaxSearcher {
         -INF,
         INF,
         maximizingPlayer,
-        useTT
+        useTT,
       );
 
       if (!this.isAborted && result.bestMove !== null) {

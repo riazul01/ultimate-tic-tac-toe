@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
-import type { AIDifficulty, GameSettings, GameStats, Player } from '../engine/game/types';
-import { RulesModal } from '../components/modals/RulesModal';
-import { StatsModal } from '../components/modals/StatsModal';
-import { soundManager } from '../utils/sound';
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import type {
+  AIDifficulty,
+  GameSettings,
+  GameStats,
+  Player,
+} from "engine/game/types";
+import { RulesModal } from "components/modals/RulesModal";
+import { StatsModal } from "components/modals/StatsModal";
+import { soundManager } from "utils/sound";
 
 interface HomePageProps {
   settings: GameSettings;
@@ -21,7 +26,9 @@ export const HomePage: React.FC<HomePageProps> = ({
   onStartNewGame,
 }) => {
   const navigate = useNavigate();
-  const [activeModal, setActiveModal] = useState<'rules' | 'stats' | null>(null);
+  const [activeModal, setActiveModal] = useState<"rules" | "stats" | null>(
+    null,
+  );
 
   const difficulties: {
     id: AIDifficulty;
@@ -29,36 +36,36 @@ export const HomePage: React.FC<HomePageProps> = ({
     description: string;
     depth: string;
   }[] = [
-      {
-        id: 'easy',
-        name: 'Easy',
-        description: 'Relaxed tactical play with occasional openings',
-        depth: '1-Ply',
-      },
-      {
-        id: 'medium',
-        name: 'Medium',
-        description: 'Solid defense, blocks immediate win threats',
-        depth: '3-Ply',
-      },
-      {
-        id: 'hard',
-        name: 'Hard',
-        description: 'Deep alpha-beta lookahead and sector routing',
-        depth: '5-Ply',
-      },
-      {
-        id: 'expert',
-        name: 'Expert',
-        description: 'Iterative deepening with transposition cache',
-        depth: '7-Ply',
-      },
-    ];
+    {
+      id: "easy",
+      name: "Easy",
+      description: "Relaxed tactical play with occasional openings",
+      depth: "1-Ply",
+    },
+    {
+      id: "medium",
+      name: "Medium",
+      description: "Solid defense, blocks immediate win threats",
+      depth: "3-Ply",
+    },
+    {
+      id: "hard",
+      name: "Hard",
+      description: "Deep alpha-beta lookahead and sector routing",
+      depth: "5-Ply",
+    },
+    {
+      id: "expert",
+      name: "Expert",
+      description: "Iterative deepening with transposition cache",
+      depth: "7-Ply",
+    },
+  ];
 
   const handleStartGame = () => {
     soundManager.playPlayerMove();
     onStartNewGame(settings.humanSymbol);
-    navigate('/play');
+    navigate("/play");
   };
 
   const handleDifficultySelect = (diff: AIDifficulty) => {
@@ -79,21 +86,9 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   const handleThemeToggle = () => {
-    const nextTheme = settings.theme === 'dark' ? 'light' : 'dark';
+    const nextTheme = settings.theme === "dark" ? "light" : "dark";
     if (settings.soundEnabled) soundManager.playAiMove();
     onUpdateSettings({ theme: nextTheme });
-  };
-
-  const handleAnimationsToggle = () => {
-    const nextAnim = !settings.animationsEnabled;
-    if (settings.soundEnabled) soundManager.playAiMove();
-    onUpdateSettings({ animationsEnabled: nextAnim });
-  };
-
-  const handleDebugToggle = () => {
-    const nextDebug = !settings.debugMode;
-    if (settings.soundEnabled) soundManager.playAiMove();
-    onUpdateSettings({ debugMode: nextDebug });
   };
 
   return (
@@ -103,8 +98,8 @@ export const HomePage: React.FC<HomePageProps> = ({
         className="absolute inset-0 opacity-[0.035] pointer-events-none"
         style={{
           backgroundImage:
-            'linear-gradient(to right, #6366f1 1px, transparent 1px), linear-gradient(to bottom, #6366f1 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
+            "linear-gradient(to right, #6366f1 1px, transparent 1px), linear-gradient(to bottom, #6366f1 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
         }}
       />
       <div className="absolute top-1/4 -left-24 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
@@ -124,7 +119,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       </div>
 
       {/* Main Compact Configuration Card */}
-      <div className="w-full max-w-[390px] bg-slate-900/85 border border-slate-800/90 rounded-2xl p-5 space-y-4 backdrop-blur-xl shadow-2xl shadow-black/40 relative z-10">
+      <div className="w-full max-w-97.5 bg-slate-900/85 border border-slate-800/90 rounded-2xl p-5 space-y-4 backdrop-blur-xl shadow-2xl shadow-black/40 relative z-10">
         {/* Compact Segmented Difficulty Selector */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-[11px] font-semibold text-slate-300 px-0.5">
@@ -143,9 +138,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   type="button"
                   onClick={() => handleDifficultySelect(d.id)}
                   className={`py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer active:scale-95 ${
-                    isSelected
-                      ? 'bg-indigo-600 text-white'
-                      : 'text-slate-400'
+                    isSelected ? "bg-indigo-600 text-white" : "text-slate-400"
                   }`}
                 >
                   {d.name}
@@ -155,7 +148,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           <div className="text-[10.5px] text-slate-400 text-center truncate px-1">
-            {difficulties.find((d) => d.id === settings.difficulty)?.description}
+            {
+              difficulties.find((d) => d.id === settings.difficulty)
+                ?.description
+            }
           </div>
         </div>
 
@@ -167,14 +163,21 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => handleSymbolSelect('X')}
+              onClick={() => handleSymbolSelect("X")}
               className={`py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-95 ${
-                settings.humanSymbol === 'X'
-                  ? 'bg-sky-500/15 border-sky-500 text-sky-300'
-                  : 'bg-slate-950/50 border-slate-800/80 text-slate-400'
+                settings.humanSymbol === "X"
+                  ? "bg-sky-500/15 border-sky-500 text-sky-300"
+                  : "bg-slate-950/50 border-slate-800/80 text-slate-400"
               }`}
             >
-              <svg className="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+              <svg
+                className="w-3.5 h-3.5 text-sky-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
@@ -183,14 +186,21 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             <button
               type="button"
-              onClick={() => handleSymbolSelect('O')}
+              onClick={() => handleSymbolSelect("O")}
               className={`py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-95 ${
-                settings.humanSymbol === 'O'
-                  ? 'bg-rose-500/15 border-rose-500 text-rose-300'
-                  : 'bg-slate-950/50 border-slate-800/80 text-slate-400'
+                settings.humanSymbol === "O"
+                  ? "bg-rose-500/15 border-rose-500 text-rose-300"
+                  : "bg-slate-950/50 border-slate-800/80 text-slate-400"
               }`}
             >
-              <svg className="w-3.5 h-3.5 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+              <svg
+                className="w-3.5 h-3.5 text-rose-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+              >
                 <circle cx="12" cy="12" r="8" />
               </svg>
               <span>Play O (2nd Move)</span>
@@ -204,9 +214,24 @@ export const HomePage: React.FC<HomePageProps> = ({
           onClick={handleStartGame}
           className="w-full py-2.5 bg-indigo-600 active:bg-indigo-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center space-x-2 active:scale-[0.98]"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span>Start Match</span>
         </button>
@@ -219,13 +244,21 @@ export const HomePage: React.FC<HomePageProps> = ({
               type="button"
               onClick={() => {
                 if (settings.soundEnabled) soundManager.playAiMove();
-                setActiveModal('rules');
+                setActiveModal("rules");
               }}
               title="Game Rules & Guide"
               aria-label="Game Rules & Guide"
               className="dock-action-rules px-2.5 py-1.5 rounded-lg bg-slate-950/60 text-slate-700 dark:text-slate-300 border border-slate-800 transition-all cursor-pointer flex items-center space-x-1.5 text-xs active:scale-95"
             >
-              <svg className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
@@ -236,17 +269,25 @@ export const HomePage: React.FC<HomePageProps> = ({
               type="button"
               onClick={() => {
                 if (settings.soundEnabled) soundManager.playAiMove();
-                setActiveModal('stats');
+                setActiveModal("stats");
               }}
               title={
                 stats.gamesPlayed > 0
                   ? `Career Stats: ${stats.humanWins}W / ${stats.gamesPlayed}G (${Math.round((stats.humanWins / stats.gamesPlayed) * 100)}% Win Rate)`
-                  : 'Career Stats'
+                  : "Career Stats"
               }
               aria-label="Career Stats"
               className="dock-action-stats px-2.5 py-1.5 rounded-lg bg-slate-950/60 text-slate-700 dark:text-slate-300 border border-slate-800 transition-all cursor-pointer flex items-center space-x-1.5 text-xs active:scale-95"
             >
-              <svg className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
                 <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
                 <path d="M4 22h16" />
@@ -269,21 +310,43 @@ export const HomePage: React.FC<HomePageProps> = ({
             <button
               type="button"
               onClick={handleSoundToggle}
-              title={settings.soundEnabled ? 'Audio: Enabled (Click to Mute)' : 'Audio: Muted (Click to Enable)'}
-              aria-label={settings.soundEnabled ? 'Audio Enabled' : 'Audio Muted'}
+              title={
+                settings.soundEnabled
+                  ? "Audio: Enabled (Click to Mute)"
+                  : "Audio: Muted (Click to Enable)"
+              }
+              aria-label={
+                settings.soundEnabled ? "Audio Enabled" : "Audio Muted"
+              }
               className={`dock-action-sound p-2 rounded-lg border transition-all cursor-pointer active:scale-95 ${
                 settings.soundEnabled
-                  ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
-                  : 'bg-slate-950/60 border-slate-800 text-slate-500'
+                  ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
+                  : "bg-slate-950/60 border-slate-800 text-slate-500"
               }`}
             >
               {settings.soundEnabled ? (
-                <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                   <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
                 </svg>
               ) : (
-                <svg className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                   <line x1="23" y1="9" x2="17" y2="15" />
                   <line x1="17" y1="9" x2="23" y2="15" />
@@ -295,16 +358,30 @@ export const HomePage: React.FC<HomePageProps> = ({
             <button
               type="button"
               onClick={handleThemeToggle}
-              title={settings.theme === 'light' ? 'Theme: Light Mode' : 'Theme: Dark Mode'}
-              aria-label={settings.theme === 'light' ? 'Light Theme' : 'Dark Theme'}
+              title={
+                settings.theme === "light"
+                  ? "Theme: Light Mode"
+                  : "Theme: Dark Mode"
+              }
+              aria-label={
+                settings.theme === "light" ? "Light Theme" : "Dark Theme"
+              }
               className={`dock-action-theme p-2 rounded-lg border transition-all cursor-pointer active:scale-95 ${
-                settings.theme === 'light'
-                  ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
-                  : 'bg-slate-950/60 border-slate-800 text-slate-300'
+                settings.theme === "light"
+                  ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
+                  : "bg-slate-950/60 border-slate-800 text-slate-300"
               }`}
             >
-              {settings.theme === 'light' ? (
-                <svg className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {settings.theme === "light" ? (
+                <svg
+                  className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <circle cx="12" cy="12" r="5" />
                   <line x1="12" y1="1" x2="12" y2="3" />
                   <line x1="12" y1="21" x2="12" y2="23" />
@@ -316,7 +393,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
               ) : (
-                <svg className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
               )}
@@ -326,9 +411,12 @@ export const HomePage: React.FC<HomePageProps> = ({
       </div>
 
       {/* Modals */}
-      <RulesModal isOpen={activeModal === 'rules'} onClose={() => setActiveModal(null)} />
+      <RulesModal
+        isOpen={activeModal === "rules"}
+        onClose={() => setActiveModal(null)}
+      />
       <StatsModal
-        isOpen={activeModal === 'stats'}
+        isOpen={activeModal === "stats"}
         onClose={() => setActiveModal(null)}
         stats={stats}
         onResetStats={onResetStats}
@@ -336,4 +424,3 @@ export const HomePage: React.FC<HomePageProps> = ({
     </div>
   );
 };
-

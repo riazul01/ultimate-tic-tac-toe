@@ -1,7 +1,7 @@
-import React from 'react';
-import type { GameSettings } from '../../engine/game/types';
-import { Modal } from '../ui/Modal';
-import { soundManager } from '../../utils/sound';
+import React from "react";
+import type { GameSettings } from "engine/game/types";
+import { Modal } from "components/ui/Modal";
+import { soundManager } from "utils/sound";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -37,22 +37,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <div className="theme-selector-group flex items-center space-x-1 bg-slate-900 p-1 rounded-lg border border-slate-700">
             <button
               type="button"
-              onClick={() => onUpdateSettings({ theme: 'dark' })}
+              onClick={() => onUpdateSettings({ theme: "dark" })}
               className={`px-2.5 py-1 text-xs font-semibold rounded-md cursor-pointer ${
-                settings.theme === 'dark'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400'
+                settings.theme === "dark"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400"
               }`}
             >
               Dark
             </button>
             <button
               type="button"
-              onClick={() => onUpdateSettings({ theme: 'light' })}
+              onClick={() => onUpdateSettings({ theme: "light" })}
               className={`px-2.5 py-1 text-xs font-semibold rounded-md cursor-pointer ${
-                settings.theme === 'light'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400'
+                settings.theme === "light"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400"
               }`}
             >
               Light
@@ -77,7 +77,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               onChange={(e) => handleSoundToggle(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-600"></div>
+            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-600"></div>
           </label>
         </div>
 
@@ -98,7 +98,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               }
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-600"></div>
+            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-600"></div>
           </label>
         </div>
 
@@ -121,7 +121,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               }
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-600"></div>
+            <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 peer-checked:bg-indigo-600"></div>
           </label>
         </div>
       </div>

@@ -1,7 +1,7 @@
-import React, { useEffect, useCallback } from 'react';
-import type { GameState, Move, Player } from '../../engine/game/types';
-import { isBoardPlayable } from '../../engine/game/gameRules';
-import { MicroBoard } from './MicroBoard';
+import React, { useEffect, useCallback } from "react";
+import type { GameState, Move, Player } from "engine/game/types";
+import { isBoardPlayable } from "engine/game/gameRules";
+import { MicroBoard } from "./MicroBoard";
 
 interface GameBoardProps {
   gameState: GameState;
@@ -30,28 +30,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   // Keyboard navigation support
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
+      if (
+        ["INPUT", "TEXTAREA", "SELECT"].includes(
+          (e.target as HTMLElement)?.tagName,
+        )
+      ) {
         return;
       }
 
       const keyNum = parseInt(e.key, 10);
       if (!isNaN(keyNum) && keyNum >= 1 && keyNum <= 9) {
         const cellIdx = keyNum - 1;
-        if (activeBoard !== null && isBoardPlayable(boardStatuses[activeBoard])) {
+        if (
+          activeBoard !== null &&
+          isBoardPlayable(boardStatuses[activeBoard])
+        ) {
           onCellClick(activeBoard, cellIdx);
         }
       }
     },
-    [activeBoard, boardStatuses, onCellClick]
+    [activeBoard, boardStatuses, onCellClick],
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   const renderMacroWinningStrike = () => {
-    if (!macroWinningLine || !winner || winner === 'draw') return null;
+    if (!macroWinningLine || !winner || winner === "draw") return null;
 
     const [a, , c] = macroWinningLine;
     const getPos = (idx: number) => {
@@ -73,7 +80,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           y1={start.y}
           x2={end.x}
           y2={end.y}
-          stroke={winner === 'X' ? '#38bdf8' : '#f43f5e'}
+          stroke={winner === "X" ? "#38bdf8" : "#f43f5e"}
           strokeWidth="4"
           strokeLinecap="round"
           className="winning-strike-line drop-shadow-[0_0_16px_rgba(255,255,255,0.8)]"
@@ -87,7 +94,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2 w-full relative">
         {boards.map((cells, boardIdx) => {
           const isActive =
-            gameState.gameStatus === 'playing' &&
+            gameState.gameStatus === "playing" &&
             (activeBoard === null || activeBoard === boardIdx) &&
             isBoardPlayable(boardStatuses[boardIdx]);
 

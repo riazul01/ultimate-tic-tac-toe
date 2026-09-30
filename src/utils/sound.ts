@@ -25,7 +25,7 @@ class SoundManager {
         this.ctx = new AudioContextClass();
       }
     }
-    if (this.ctx && this.ctx.state === 'suspended') {
+    if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume();
     }
     return this.ctx;
@@ -39,7 +39,7 @@ class SoundManager {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = 'sine';
+    osc.type = "sine";
     osc.frequency.setValueAtTime(520, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(780, ctx.currentTime + 0.05);
 
@@ -61,7 +61,7 @@ class SoundManager {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = 'triangle';
+    osc.type = "triangle";
     osc.frequency.setValueAtTime(360, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.07);
 
@@ -86,7 +86,7 @@ class SoundManager {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = 'sine';
+      osc.type = "sine";
       osc.frequency.setValueAtTime(freq, startTime);
 
       gain.gain.setValueAtTime(0.15, startTime);
@@ -111,7 +111,7 @@ class SoundManager {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = 'triangle';
+      osc.type = "triangle";
       osc.frequency.setValueAtTime(freq, startTime);
 
       gain.gain.setValueAtTime(0.2, startTime);
@@ -136,7 +136,7 @@ class SoundManager {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = 'sine';
+      osc.type = "sine";
       osc.frequency.setValueAtTime(freq, startTime);
 
       gain.gain.setValueAtTime(0.1, startTime);
@@ -158,7 +158,7 @@ class SoundManager {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
-    osc.type = 'square';
+    osc.type = "square";
     osc.frequency.setValueAtTime(140, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.06);
 

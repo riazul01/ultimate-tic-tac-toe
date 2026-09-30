@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
 import type {
   AISearchStats,
   GameSettings,
@@ -6,17 +6,17 @@ import type {
   GameStats,
   Move,
   Player,
-} from '../engine/game/types';
+} from "engine/game/types";
 import {
   applyMove,
   createInitialGameState,
   isValidMove,
   undoMove,
   redoMove,
-} from '../engine/game/gameRules';
-import { AIAgent } from '../engine/ai/aiAgent';
-import { DIFFICULTY_CONFIGS } from '../engine/ai/difficulty';
-import { soundManager } from '../utils/sound';
+} from "engine/game/gameRules";
+import { AIAgent } from "engine/ai/aiAgent";
+import { DIFFICULTY_CONFIGS } from "engine/ai/difficulty";
+import { soundManager } from "utils/sound";
 import {
   clearSavedGameState,
   loadGameSettings,
@@ -25,12 +25,12 @@ import {
   saveGameSettings,
   saveGameState,
   saveGameStats,
-} from '../utils/storage';
+} from "utils/storage";
 
 const localAgent = new AIAgent();
 
 const disableTransitionsTemporarily = () => {
-  const css = document.createElement('style');
+  const css = document.createElement("style");
   css.appendChild(
     document.createTextNode(
       `*, *::before, *::after {
@@ -39,8 +39,8 @@ const disableTransitionsTemporarily = () => {
         -o-transition: none !important;
         -ms-transition: none !important;
         transition: none !important;
-      }`
-    )
+      }`,
+    ),
   );
   document.head.appendChild(css);
 
@@ -60,18 +60,22 @@ const disableTransitionsTemporarily = () => {
 };
 
 export function useGame() {
-  const [settings, setSettings] = useState<GameSettings>(() => loadGameSettings());
+  const [settings, setSettings] = useState<GameSettings>(() =>
+    loadGameSettings(),
+  );
   const [stats, setStats] = useState<GameStats>(() => loadGameStats());
   const [gameState, setGameState] = useState<GameState>(() => {
     const saved = loadSavedGameState();
-    if (saved && saved.gameStatus === 'playing') {
+    if (saved && saved.gameStatus === "playing") {
       return saved;
     }
-    return createInitialGameState('X');
+    return createInitialGameState("X");
   });
 
   const [isAiThinking, setIsAiThinking] = useState<boolean>(false);
-  const [aiSearchStats, setAiSearchStats] = useState<AISearchStats | null>(null);
+  const [aiSearchStats, setAiSearchStats] = useState<AISearchStats | null>(
+    null,
+  );
 
   const gameStateRef = useRef(gameState);
   gameStateRef.current = gameState;
@@ -92,29 +96,29 @@ export function useGame() {
     const body = document.body;
 
     const isLight =
-      settings.theme === 'light' ||
-      (settings.theme === 'system' &&
-        !window.matchMedia('(prefers-color-scheme: dark)').matches);
+      settings.theme === "light" ||
+      (settings.theme === "system" &&
+        !window.matchMedia("(prefers-color-scheme: dark)").matches);
 
     if (isLight) {
-      root.classList.add('light');
-      root.classList.remove('dark');
-      body.classList.add('light');
-      body.classList.remove('dark');
+      root.classList.add("light");
+      root.classList.remove("dark");
+      body.classList.add("light");
+      body.classList.remove("dark");
     } else {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      body.classList.add('dark');
-      body.classList.remove('light');
+      root.classList.add("dark");
+      root.classList.remove("light");
+      body.classList.add("dark");
+      body.classList.remove("light");
     }
 
     restoreTransitions();
   }, [settings.theme]);
 
   useEffect(() => {
-    if (gameState.gameStatus === 'playing' && gameState.history.length > 0) {
+    if (gameState.gameStatus === "playing" && gameState.history.length > 0) {
       saveGameState(gameState);
-    } else if (gameState.gameStatus === 'finished') {
+    } else if (gameState.gameStatus === "finished") {
       clearSavedGameState();
     }
   }, [gameState]);
@@ -127,14 +131,14 @@ export function useGame() {
     saveGameStats(stats);
   }, [stats]);
 
-  const updateGameEndStats = useCallback((winner: Player | 'draw' | null) => {
+  const updateGameEndStats = useCallback((winner: Player | "draw" | null) => {
     if (!winner) return;
 
     const human = settingsRef.current.humanSymbol;
     setStats((prev) => {
       const isHumanWin = winner === human;
-      const isAiWin = winner !== 'draw' && winner !== human;
-      const isDraw = winner === 'draw';
+      const isAiWin = winner !== "draw" && winner !== human;
+      const isDraw = winner === "draw";
 
       const newStreak = isHumanWin ? prev.currentStreak + 1 : 0;
       const bestStreak = Math.max(prev.bestStreak, newStreak);
@@ -153,10 +157,11 @@ export function useGame() {
   const applyAiMove = useCallback(
     (move: Move, aiStats: AISearchStats) => {
       const current = gameStateRef.current;
-      const aiSymbol: Player = settingsRef.current.humanSymbol === 'X' ? 'O' : 'X';
+      const aiSymbol: Player =
+        settingsRef.current.humanSymbol === "X" ? "O" : "X";
 
       if (
-        current.gameStatus !== 'playing' ||
+        current.gameStatus !== "playing" ||
         current.currentPlayer !== aiSymbol ||
         !isValidMove(current, move.boardIndex, move.cellIndex, aiSymbol)
       ) {
@@ -177,7 +182,7 @@ export function useGame() {
       }
       if (nextState.winner) {
         setTimeout(() => {
-          if (nextState.winner === 'draw') {
+          if (nextState.winner === "draw") {
             soundManager.playDraw();
           } else {
             soundManager.playMacroWin();
@@ -186,14 +191,15 @@ export function useGame() {
         updateGameEndStats(nextState.winner);
       }
     },
-    [updateGameEndStats]
+    [updateGameEndStats],
   );
 
   const triggerAiTurn = useCallback(
     (stateToSearch: GameState) => {
-      const aiSymbol: Player = settingsRef.current.humanSymbol === 'X' ? 'O' : 'X';
+      const aiSymbol: Player =
+        settingsRef.current.humanSymbol === "X" ? "O" : "X";
       if (
-        stateToSearch.gameStatus !== 'playing' ||
+        stateToSearch.gameStatus !== "playing" ||
         stateToSearch.currentPlayer !== aiSymbol
       ) {
         return;
@@ -204,7 +210,8 @@ export function useGame() {
       const diffConfig = DIFFICULTY_CONFIGS[settingsRef.current.difficulty];
       const thinkingDelay =
         diffConfig.minThinkingTimeMs +
-        Math.random() * (diffConfig.maxThinkingTimeMs - diffConfig.minThinkingTimeMs);
+        Math.random() *
+          (diffConfig.maxThinkingTimeMs - diffConfig.minThinkingTimeMs);
 
       if (workerRef.current) {
         setTimeout(() => {
@@ -221,7 +228,7 @@ export function useGame() {
           if (currentReqId === requestIdRef.current) {
             const { move, stats: aiStats } = localAgent.computeMove(
               stateToSearch,
-              settingsRef.current.difficulty
+              settingsRef.current.difficulty,
             );
             if (move) {
               applyAiMove(move, aiStats);
@@ -230,14 +237,14 @@ export function useGame() {
         }, thinkingDelay);
       }
     },
-    [applyAiMove]
+    [applyAiMove],
   );
 
   useEffect(() => {
     try {
       workerRef.current = new Worker(
-        new URL('../engine/ai/aiWorker.ts', import.meta.url),
-        { type: 'module' }
+        new URL("../engine/ai/aiWorker.ts", import.meta.url),
+        { type: "module" },
       );
 
       workerRef.current.onmessage = (e) => {
@@ -251,7 +258,10 @@ export function useGame() {
         }
       };
     } catch (err) {
-      console.warn('Web worker initialization skipped, using main thread AI', err);
+      console.warn(
+        "Web worker initialization skipped, using main thread AI",
+        err,
+      );
       workerRef.current = null;
     }
 
@@ -268,7 +278,7 @@ export function useGame() {
 
       if (
         isAiThinking ||
-        current.gameStatus !== 'playing' ||
+        current.gameStatus !== "playing" ||
         current.currentPlayer !== human ||
         !isValidMove(current, boardIndex, cellIndex, human)
       ) {
@@ -288,7 +298,7 @@ export function useGame() {
 
       if (nextState.winner) {
         setTimeout(() => {
-          if (nextState.winner === 'draw') {
+          if (nextState.winner === "draw") {
             soundManager.playDraw();
           } else {
             soundManager.playMacroWin();
@@ -300,7 +310,7 @@ export function useGame() {
 
       triggerAiTurn(nextState);
     },
-    [isAiThinking, triggerAiTurn, updateGameEndStats]
+    [isAiThinking, triggerAiTurn, updateGameEndStats],
   );
 
   const startNewGame = useCallback(
@@ -310,25 +320,32 @@ export function useGame() {
       setAiSearchStats(null);
       localAgent.reset();
 
-      const activeHumanSymbol = customHumanSymbol ?? settingsRef.current.humanSymbol;
-      if (customHumanSymbol && customHumanSymbol !== settingsRef.current.humanSymbol) {
-        settingsRef.current = { ...settingsRef.current, humanSymbol: customHumanSymbol };
+      const activeHumanSymbol =
+        customHumanSymbol ?? settingsRef.current.humanSymbol;
+      if (
+        customHumanSymbol &&
+        customHumanSymbol !== settingsRef.current.humanSymbol
+      ) {
+        settingsRef.current = {
+          ...settingsRef.current,
+          humanSymbol: customHumanSymbol,
+        };
         setSettings((prev) => ({ ...prev, humanSymbol: customHumanSymbol }));
       }
 
       // In Tic-Tac-Toe, player 'X' always makes the first move
-      const firstPlayer: Player = 'X';
+      const firstPlayer: Player = "X";
       const newState = createInitialGameState(firstPlayer);
       setGameState(newState);
       clearSavedGameState();
 
-      const aiSymbol: Player = activeHumanSymbol === 'X' ? 'O' : 'X';
+      const aiSymbol: Player = activeHumanSymbol === "X" ? "O" : "X";
       // If AI is 'X', AI must play first!
-      if (aiSymbol === 'X') {
+      if (aiSymbol === "X") {
         triggerAiTurn(newState);
       }
     },
-    [triggerAiTurn]
+    [triggerAiTurn],
   );
 
   const handleUndo = useCallback(() => {
@@ -341,7 +358,10 @@ export function useGame() {
     let steps = 2;
     if (gameState.history.length === 1) {
       steps = 1;
-    } else if (gameState.currentPlayer !== human && gameState.gameStatus === 'playing') {
+    } else if (
+      gameState.currentPlayer !== human &&
+      gameState.gameStatus === "playing"
+    ) {
       steps = 1;
     }
 
@@ -377,20 +397,17 @@ export function useGame() {
     saveGameStats(fresh);
   }, []);
 
-  const updateSettings = useCallback(
-    (partial: Partial<GameSettings>) => {
-      setSettings((prev) => {
-        const next = { ...prev, ...partial };
-        return next;
-      });
-    },
-    []
-  );
+  const updateSettings = useCallback((partial: Partial<GameSettings>) => {
+    setSettings((prev) => {
+      const next = { ...prev, ...partial };
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
-    const aiSymbol = settings.humanSymbol === 'X' ? 'O' : 'X';
+    const aiSymbol = settings.humanSymbol === "X" ? "O" : "X";
     if (
-      gameState.gameStatus === 'playing' &&
+      gameState.gameStatus === "playing" &&
       gameState.currentPlayer === aiSymbol &&
       !isAiThinking
     ) {

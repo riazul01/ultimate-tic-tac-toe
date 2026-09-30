@@ -1,7 +1,12 @@
-import type { AIDifficulty, GameState, Move, AISearchStats } from '../game/types';
-import { getLegalMoves } from '../game/gameRules';
-import { DIFFICULTY_CONFIGS, findImmediateTacticalMove } from './difficulty';
-import { MinimaxSearcher } from './minimax';
+import type {
+  AIDifficulty,
+  GameState,
+  Move,
+  AISearchStats,
+} from "engine/game/types";
+import { getLegalMoves } from "engine/game/gameRules";
+import { DIFFICULTY_CONFIGS, findImmediateTacticalMove } from "./difficulty";
+import { MinimaxSearcher } from "./minimax";
 
 export class AIAgent {
   private searcher: MinimaxSearcher;
@@ -19,7 +24,7 @@ export class AIAgent {
    */
   public computeMove(
     state: GameState,
-    difficulty: AIDifficulty
+    difficulty: AIDifficulty,
   ): { move: Move | null; stats: AISearchStats } {
     const legalMoves = getLegalMoves(state);
     if (legalMoves.length === 0) {
@@ -70,7 +75,7 @@ export class AIAgent {
     // Run Minimax search
     const searchResult = this.searcher.searchBestMove(
       state,
-      config.searchOptions
+      config.searchOptions,
     );
 
     // Blunder chance for easier difficulties

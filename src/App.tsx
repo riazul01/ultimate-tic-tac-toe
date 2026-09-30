@@ -1,8 +1,8 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import { useGame } from './hooks/useGame';
-import { HomePage } from './pages/HomePage';
-import { GamePage } from './pages/GamePage';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { useGame } from "./hooks/useGame";
+import { HomePage } from "./pages/HomePage";
+import { GamePage } from "./pages/GamePage";
 
 export const App: React.FC = () => {
   const {
